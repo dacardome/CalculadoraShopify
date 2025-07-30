@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chequeo Financiero para Ecommerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #1e3a8a;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d1d5db;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .progress {
+            height: 100%;
+            background-color: #2563eb;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+        .step {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #e5e7eb;
+            border-radius: 50%;
+            top: -7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #6b7280;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .step.active {
+            background-color: #2563eb;
+            color: white;
+        }
+        .step.completed {
+            background-color: #2563eb;
+            color: white;
+        }
+        .step-1 { left: 0%; }
+        .step-2 { left: 25%; }
+        .step-3 { left: 50%; }
+        .step-4 { left: 75%; }
+        .step-5 { left: 100%; transform: translateX(-100%); }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+        <!-- Header -->
+        <header class="bg-white shadow-md">
+            <div class="container mx-auto px-4 py-6 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <img src="logodanielfinanciero.jpeg" alt="Logo Daniel Financiero" class="h-10 w-auto">
+                    <h1 class="text-2xl font-bold text-blue-900">CHEQUEO FINANCIERO PARA ECOMMERCE</h1>
+                </div>
+                <button id="startButton" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                    Comenzar Diagnóstico
+                </button>
+            </div>
+        </header>
+
+        <!-- Landing Section -->
+        <section id="landing" class="container mx-auto px-4 py-12">
+            <div class="max-w-4xl mx-auto">
+                <!-- Campo para el nombre de la empresa/marca -->
+                <div class="w-full max-w-lg mb-8 bg-blue-50 rounded-xl border border-blue-100 p-6 flex flex-col">
+                    <label for="businessName" class="block text-blue-900 font-semibold mb-2">Nombre de tu empresa o marca:</label>
+                    <input type="text" id="businessName" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Ejemplo: Mi Tienda Online">
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                    <h2 class="text-3xl font-bold text-blue-900 mb-6">Diagnóstico Financiero para tu Tienda E-Commerce</h2>
+                    <p class="text-gray-700 mb-6">Esta herramienta te ayudará a calcular la rentabilidad real de tu tienda, entender el impacto de los costos y comisiones, y recibir recomendaciones estratégicas para mejorar tu negocio.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-blue-50 p-6 rounded-xl">
+                            <div class="text-blue-600 text-4xl mb-4">📊</div>
+                            <h3 class="text-xl font-semibold text-blue-900 mb-2">Diagnóstico Financiero</h3>
+                            <p class="text-gray-600">Obtén un análisis completo de tu rentabilidad actual y potencial en minutos.</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl">
+                            <div class="text-blue-600 text-4xl mb-4">💡</div>
+                            <h3 class="text-xl font-semibold text-blue-900 mb-2">Recomendaciones</h3>
+                            <p class="text-gray-600">Recibe sugerencias personalizadas para optimizar tu inversión en pauta y precios.</p>
+                        </div>
+                        <div class="bg-blue-50 p-6 rounded-xl">
+                            <div class="text-blue-600 text-4xl mb-4">📈</div>
+                            <h3 class="text-xl font-semibold text-blue-900 mb-2">Simulador</h3>
+                            <p class="text-gray-600">Explora diferentes escenarios para maximizar tus ganancias.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button id="startButtonBottom" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-lg transition duration-300 shadow-md text-lg">
+                            Iniciar mi Diagnóstico
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <h3 class="text-2xl font-bold text-blue-900 mb-6">¿Cómo funciona?</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center text-blue-600 font-bold mr-4 flex-shrink-0">1</div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-900 mb-1">Ingresa los datos de tu negocio</h4>
+                                <p class="text-gray-600">Completa un formulario sencillo con información sobre tus productos, costos, comisiones y objetivos.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center text-blue-600 font-bold mr-4 flex-shrink-0">2</div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-900 mb-1">Recibe tu diagnóstico</h4>
+                                <p class="text-gray-600">Obtén un análisis detallado de tu margen de contribución, punto de equilibrio y más.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center text-blue-600 font-bold mr-4 flex-shrink-0">3</div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-900 mb-1">Agenda la revisión personalizada de tus resultados</h4>
+                                <p class="text-gray-600">Con los resultados que obtuviste realizaremos un análsis detallado para que puedas tomar las mejores decisiones.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center text-blue-600 font-bold mr-4 flex-shrink-0">4</div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-blue-900 mb-1">Toma acción</h4>
+                                <p class="text-gray-600">Con la información que obtuviste estas listo para tomar las mejores decisiones en tu comercio electrónico.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Pantalla de Resumen Final -->
+        <section id="summarySection" class="container mx-auto px-4 py-8 hidden">
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-blue-900 mb-6">Resumen Final</h2>
+                    <div id="summaryContent">
+                        <!-- Aquí se llenará el resumen visual -->
+                    </div>
+                    <div class="flex flex-wrap gap-4 mt-8">
+                        <button onclick="exportSummaryToPDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">Descargar PDF</button>
+                        <button onclick="exportFullPageToPDF()" class="bg-blue-900 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">Exportar todo a PDF</button>
+                        <button onclick="sendSummaryByEmail()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">Enviar por correo</button>
+                        <button id="consultingBtnSummary" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">Agendar Consultoría</button>
+                        <button id="backToDiagnosisBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">Volver al Diagnóstico</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section id="calculator" class="container mx-auto px-4 py-8 hidden">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-xl p-8 mb-8">
+                    <div class="progress-bar">
+                        <div class="progress" id="progressBar" style="width: 0%"></div>
+                        <div class="step step-1 active">1</div>
+                        <div class="step step-2">2</div>
+                        <div class="step step-3">3</div>
+                        <div class="step step-4">4</div>
+                        <div class="step step-5">5</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="tab1">
+                        <h2 class="text-2xl font-bold text-blue-900 mb-6">Información de Producto</h2>
+                        <div class="space-y-6">
+                            <div class="grid md:grid-cols-5 gap-4 items-end">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Nombre</label>
+                                    <input type="text" id="productName" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Nombre del producto">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Precio de venta</label>
+                                    <input type="number" id="salePrice" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="100000">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Costo por unidad</label>
+                                    <input type="number" id="productCost" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="50000">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">Ventas mensuales</label>
+                                    <input type="number" id="monthlySales" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="100">
+                                </div>
+                                <div>
+                                    <button id="addProductBtn" type="button" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 shadow-md w-full">Agregar producto</button>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2">Productos agregados</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="min-w-full bg-white border border-gray-200 rounded-lg" id="productsTable">
+                                        <thead>
+                                            <tr class="bg-blue-50 text-blue-900">
+                                                <th class="py-2 px-4 border-b">Nombre</th>
+                                                <th class="py-2 px-4 border-b">Precio</th>
+                                                <th class="py-2 px-4 border-b">Costo</th>
+                                                <th class="py-2 px-4 border-b">Ventas</th>
+                                                <th class="py-2 px-4 border-b">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="productsTableBody">
+                                            <!-- Productos agregados dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold text-blue-900 mb-6">Gastos fijos mensuales discriminados</h2>
+    <p class="text-yellow-800 bg-yellow-100 border-l-4 border-yellow-400 p-2 mb-4 rounded">No agregues presupuesto de Pauta ya que tendrás que discriminarlo más adelante.</p>
+                                <div id="gastosTableBlock" class="mb-2">
+                                    <table class="min-w-full bg-white border border-gray-200 rounded-lg text-sm" id="gastosTable">
+                                        <thead>
+                                            <tr class="bg-blue-50 text-blue-900">
+                                                <th class="py-2 px-2 border-b">Categoría</th>
+                                                <th class="py-2 px-2 border-b">Descripción</th>
+                                                <th class="py-2 px-2 border-b">Valor mensual (COP)</th>
+                                                <th class="py-2 px-2 border-b">Acción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gastosTableBody">
+                                            <!-- Gastos agregados dinámicamente -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button id="addGastoBtn" type="button" class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition duration-300 shadow-md mb-2">+ Agregar otro gasto</button>
+                                <div class="text-right font-semibold text-blue-900 mt-2">Total de gastos fijos ingresados: <span id="gastosTotal">$0</span> COP</div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button id="nextBtn1" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                    Siguiente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="tab2">
+                        <h2 class="text-2xl font-bold text-blue-900 mb-6">Comisiones y Tarifas</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Comisión por pasarela de pago (%)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Porcentaje que cobra tu pasarela de pago por cada transacción (ej. PayU, Wompi).</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="paymentGatewayFee" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="3.5" step="0.01" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Comisión de Shopify (%)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Porcentaje que cobra Shopify por cada venta según tu plan.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="shopifyFee" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="2" step="0.01" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Comisión de terceros (%) (opcional)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Otras comisiones que debas pagar por cada venta (ej. marketplace).</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="thirdPartyFee" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="0" step="0.01">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Gastos de manejo y envío por unidad
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Costo promedio de enviar cada producto al cliente. <br><b>Solo coloca este valor si tú pagas el envío, si se lo cobras al cliente no lo pongas.</b></span>
+                                    </span>
+                                    <span class="block text-xs text-yellow-700 mt-1">Solo coloca este valor si tú pagas el envío, si se lo cobras al cliente no lo pongas.</span>
+                                </label>
+                                <input type="number" id="shippingCost" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="10000">
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button id="prevBtn2" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                    Anterior
+                                </button>
+                                <button id="nextBtn2" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                    Siguiente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="tab3">
+                        <h2 class="text-2xl font-bold text-blue-900 mb-6">Marketing y Pauta</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Presupuesto actual de pauta mensual
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Cuánto inviertes mensualmente en publicidad digital.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="adBudget" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="500000" required>
+                            </div>
+                            <div id="adBudgetNote" class="mt-2 text-sm font-semibold rounded bg-yellow-100 text-yellow-900 p-2 border-l-4 border-yellow-500 shadow-sm">
+                                <span class="block">Importante: ingresa el valor del presupuesto de pauta <b>sin incluir IVA</b> (valor antes de impuestos).</span>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    ROAS esperado (%)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Return On Ad Spend. Por cada peso invertido en publicidad, cuánto esperas recibir en ventas. Ej: 300% significa que por cada $1 invertido, recibes $3 en ventas.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="expectedROAS" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="300" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Costo por adquisición estimado (opcional)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Cuánto estás dispuesto a pagar por adquirir un nuevo cliente.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="estimatedCAC" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="20000">
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button id="prevBtn3" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                    Anterior
+                                </button>
+                                <button id="nextBtn3" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                    Siguiente
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="tab4">
+                        <h2 class="text-2xl font-bold text-blue-900 mb-6">Objetivos</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Ganancia neta esperada mensual
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Cuánto dinero quieres ganar mensualmente después de todos los gastos.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="expectedProfit" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="2000000" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Margen mínimo deseado (%)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Qué porcentaje mínimo de ganancia quieres tener sobre cada venta.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="minMargin" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="30" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Descuento máximo que quieres ofrecer (%) (opcional)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">El descuento máximo que estarías dispuesto a ofrecer en promociones.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="maxDiscount" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="20">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 font-medium mb-2">
+                                    Objetivo de ventas mensuales (unidades)
+                                    <span class="tooltip ml-1 text-blue-500">ⓘ
+                                        <span class="tooltiptext">Cuántas unidades te gustaría vender al mes.</span>
+                                    </span>
+                                </label>
+                                <input type="number" id="salesTarget" class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="150" required>
+                            </div>
+                            
+                            <div class="flex justify-between">
+                                <button id="prevBtn4" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                    Anterior
+                                </button>
+                                <button id="calculateBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                    Calcular Diagnóstico
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="tab5">
+                        <div class="flex justify-end mt-8 mb-4">
+                            <button id="exportPDFBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                Exportar mi diagnóstico a PDF
+                            </button>
+                        </div>
+                        <h2 class="text-2xl font-bold text-blue-900 mb-6">Tu Diagnóstico Financiero</h2>
+
+                        <!-- Consolidado de información ingresada (solo en página de resultados) -->
+                        <div class="mb-8 p-6 bg-white rounded-xl border border-gray-200 shadow-sm" id="userSummaryBlock" style="display:none">
+                            <h3 class="text-xl font-semibold text-blue-900 mb-4">Consolidado de tu información</h3>
+                            <div id="userSummaryTable" class="overflow-x-auto"></div>
+                        </div>
+                        
+                        <div class="mb-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
+                            <h3 class="text-xl font-semibold text-blue-900 mb-4">Resumen de Rentabilidad</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="text-gray-600 mb-1">Margen de contribución:</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="contributionMarginResult">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1">Margen de contribución unitario:</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="unitContributionResult">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1">Punto de equilibrio (unidades):</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="breakEvenUnitsResult">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1">Punto de equilibrio (valor):</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="breakEvenValueResult">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
+                            <h3 class="text-xl font-semibold text-blue-900 mb-4">Análisis de Marketing</h3>
+                            <div class="mb-4">
+                                <p class="text-blue-900 font-semibold">¿Qué es el <b>ROAS necesario</b>?</p>
+                                <p class="text-gray-700 mb-2 text-sm">El <b>ROAS necesario</b> (Return On Ad Spend) indica cuántos pesos debes generar en ventas por cada peso invertido en pauta para cubrir tus costos y alcanzar tus objetivos de rentabilidad. Un ROAS mayor a 100% significa que recuperas más de lo que inviertes en publicidad.</p>
+                                <p class="text-gray-700 text-xs mb-2">Cálculo: <b>ROAS necesario = Ingresos estimados / Presupuesto de pauta</b><br>
+                                Ejemplo: Si tus ingresos estimados son $10.000.000 y tu presupuesto de pauta es $2.000.000, entonces ROAS necesario = 10.000.000 / 2.000.000 = 500%.</p>
+                                <p class="text-blue-900 font-semibold">¿Qué es el <b>Presupuesto óptimo de pauta</b>?</p>
+                                <p class="text-gray-700 text-sm">El <b>Presupuesto óptimo de pauta</b> es la inversión recomendada en publicidad para lograr tus metas de ventas y utilidad, considerando tus precios, costos y márgenes. Te ayuda a no sobreinvertir ni quedarte corto en tu estrategia de adquisición de clientes.</p>
+                                <p class="text-gray-700 text-xs mb-2">Cálculo: <b>Presupuesto óptimo = Ingresos estimados / ROAS esperado</b><br>
+                                Ejemplo: Si tus ingresos estimados son $10.000.000 y tu ROAS esperado es 400%, entonces Presupuesto óptimo = 10.000.000 / 4 = $2.500.000.</p>
+                                <p class="text-blue-900 font-semibold">¿Qué es el <b>CAC máximo permitido</b>?</p>
+                                <p class="text-gray-700 text-xs mb-2">Cálculo: <b>CAC máximo = Margen de contribución unitario</b><br>
+                                Es decir, el CAC máximo es el margen que te queda después de restar todos los costos y comisiones a tu precio de venta.</p>
+                                <p class="text-blue-900 font-semibold">¿Qué es el <b>Descuento máximo permitido</b>?</p>
+                                <p class="text-gray-700 text-xs">Cálculo: <b>Descuento máximo = 1 - ((Costos + Comisiones + Envío) / (Precio de venta × (1 - Margen mínimo deseado)))</b><br>
+                                Así aseguras que, incluso aplicando el descuento, no bajas de tu margen mínimo objetivo.</p>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="text-gray-600 mb-1">ROAS necesario:</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="requiredROASResult">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1">Presupuesto óptimo de pauta:</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="optimalBudgetResult">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1">CAC máximo permitido:</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="maxCACResult">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-600 mb-1">Descuento máximo permitido:</p>
+                                    <p class="text-2xl font-bold text-blue-900" id="maxAllowedDiscountResult">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
+                            <h3 class="text-xl font-semibold text-blue-900 mb-4">Desglose del Precio de Venta</h3>
+                            <div id="priceBreakdownChart" class="h-64 mb-4"></div>
+                            <div id="priceBreakdownText" class="text-gray-700"></div>
+                        </div>
+                        
+                        <div class="mb-8 p-6 bg-blue-50 rounded-xl border border-blue-100">
+                            <h3 class="text-xl font-semibold text-blue-900 mb-4">Diagnóstico General</h3>
+                            <div id="generalDiagnosis" class="text-gray-700 mb-4"></div>
+                            <div id="statusIndicator" class="flex items-center">
+                                <div id="statusIcon" class="w-6 h-6 rounded-full mr-2"></div>
+                                <p id="statusText" class="font-medium"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold text-blue-900 mb-6">Simulador de Escenarios</h3>
+                            <p class="text-gray-600 mb-6">Ajusta los parámetros para ver cómo afectan a tu rentabilidad:</p>
+                            
+                            <div class="space-y-6">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">
+                                        Precio de venta
+                                        <span id="priceSim" class="ml-2 font-bold"></span>
+                                    </label>
+                                    <input type="range" id="priceSlider" min="0" max="0" step="1000" class="w-full">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">
+                                        Presupuesto de pauta
+                                        <span id="budgetSim" class="ml-2 font-bold"></span>
+                                    </label>
+                                    <input type="range" id="budgetSlider" min="0" max="0" step="10000" class="w-full">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">
+                                        Descuento aplicado
+                                        <span id="discountSim" class="ml-2 font-bold"></span>
+                                    </label>
+                                    <input type="range" id="discountSlider" min="0" max="50" step="1" class="w-full">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">
+                                        Comisión por pasarela de pago
+                                        <span id="gatewayFeeSim" class="ml-2 font-bold"></span>
+                                    </label>
+                                    <input type="range" id="gatewayFeeSlider" min="0" max="10" step="0.1" class="w-full">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-2">
+                                        CAC simulado
+                                        <span id="cacSim" class="ml-2 font-bold"></span>
+                                    </label>
+                                    <input type="range" id="cacSlider" min="0" max="500000" step="1000" class="w-full">
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 p-6 bg-white rounded-xl border border-gray-200 shadow-sm">
+                                <h4 class="text-lg font-semibold text-blue-900 mb-4">Resultados del Simulador</h4>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <p class="text-gray-600 mb-1">Margen de contribución:</p>
+                                        <p class="text-xl font-bold text-blue-900" id="simMarginResult">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-600 mb-1">ROAS necesario:</p>
+                                        <p class="text-xl font-bold text-blue-900" id="simROASResult">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-600 mb-1">CAC máximo permitido:</p>
+                                        <p class="text-xl font-bold text-blue-900" id="simCACResult">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-gray-600 mb-1">Rentabilidad estimada:</p>
+                                        <p class="text-xl font-bold text-blue-900" id="simProfitResult">-</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-4">
+                                    <div id="simStatusIndicator" class="flex items-center">
+                                        <div id="simStatusIcon" class="w-6 h-6 rounded-full mr-2"></div>
+                                        <p id="simStatusText" class="font-medium"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
+                        <div class="flex justify-between mt-8">
+                            <button id="prevBtn5" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                Editar Datos
+                            </button>
+                            <button id="resetBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300 shadow-md">
+                                Nuevo Cálculo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="summary-utils.js"></script>
+    <script>
+        // Navigation and UI control
+        document.addEventListener('DOMContentLoaded', function() {
+            // Botón para exportar a PDF
+            const exportPDFBtn = document.getElementById('exportPDFBtn');
+            if (exportPDFBtn) {
+                exportPDFBtn.addEventListener('click', function() {
+                    exportDiagnosticoToPDF();
+                });
+            }
+// Exportar diagnóstico financiero a PDF
+
+function exportDiagnosticoToPDF() {
+    // Selecciona solo la sección de resultados finales
+    const resultSection = document.querySelector('#tab5');
+    if (!resultSection) {
+        alert('No se encontró la sección de resultados para exportar.');
+        return;
+    }
+    // Crear un clon temporal para agregar el logo arriba
+    const tempDiv = document.createElement('div');
+    tempDiv.style.background = 'white';
+    tempDiv.style.padding = '0';
+    tempDiv.style.margin = '0';
+    tempDiv.style.fontFamily = 'Poppins, Arial, sans-serif';
+    tempDiv.style.color = '#1e293b';
+    // Logo superior
+    const logo = document.createElement('img');
+    logo.src = 'logodanielfinanciero.jpeg';
+    logo.style.display = 'block';
+    logo.style.margin = '0 auto 24px auto';
+    logo.style.maxWidth = '180px';
+    logo.style.height = 'auto';
+    tempDiv.appendChild(logo);
+    // Clonar el contenido de resultados
+    const contentClone = resultSection.cloneNode(true);
+    contentClone.style.margin = '0';
+    contentClone.style.padding = '0';
+
+    // Eliminar el gráfico de pastel del desglose del precio de venta en el clon antes de exportar
+    const clonedChartDiv = contentClone.querySelector('#priceBreakdownChart');
+    if (clonedChartDiv) {
+        clonedChartDiv.innerHTML = '';
+    }
+    // --- FIN: Reemplazar canvas del gráfico por imagen en el clon ---
+
+    tempDiv.appendChild(contentClone);
+    // Eliminar todos los botones del clon antes de exportar
+    const buttons = contentClone.querySelectorAll('button');
+    buttons.forEach(btn => btn.remove());
+
+    // Opciones para html2pdf con margen de 1cm
+    const opt = {
+        margin:      [1, 1, 1, 1], // top, left, bottom, right en cm
+        filename:    generarNombreDiagnosticoPDF(),
+        image:       { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF:       { unit: 'cm', format: 'a4', orientation: 'portrait' },
+        pagebreak:   { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+    // Usar html2pdf y luego agregar el logo en cada página usando jsPDF
+    html2pdf().set(opt).from(tempDiv).toPdf().get('pdf').then(function(pdf) {
+        // Cargar el logo como base64
+        const img = new window.Image();
+        img.src = 'logodanielfinanciero.jpeg';
+        img.onload = function() {
+            // Convertir imagen a base64
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            const logoData = canvas.toDataURL('image/jpeg');
+            // Insertar el logo en cada página
+            const pageCount = pdf.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                pdf.setPage(i);
+                // Tamaño proporcional (ancho 100px, alto auto)
+                pdf.addImage(logoData, 'JPEG', 1, 1, 2.5, 1.2, undefined, 'FAST'); // x, y, width(cm), height(cm)
+            }
+        };
+    }).save();
+}
+
+function generarNombreDiagnosticoPDF() {
+    // Intenta obtener el nombre del negocio si existe
+    let nombre = document.getElementById('businessName')?.value?.trim();
+    if (!nombre) {
+        nombre = 'sin_nombre';
+    } else {
+        nombre = nombre.replace(/\s+/g, '_');
+    }
+    return `Diagnostico_Financiero_${nombre}.pdf`;
+}
+            // --- Gastos dinámicos ---
+            let gastos = [
+                { categoria: 'Arrendamientos', descripcion: '', valor: 0 },
+            ];
+            const categoriasGasto = ['Arrendamientos','Transportes','Insumos no costeables','Nómina','Servicios públicos','Otros'];
+            const gastosTableBody = document.getElementById('gastosTableBody');
+            const gastosTotalSpan = document.getElementById('gastosTotal');
+            function renderGastosTable() {
+                gastosTableBody.innerHTML = '';
+                let total = 0;
+                gastos.forEach((gasto, idx) => {
+                    total += Number(gasto.valor) || 0;
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="border px-2 py-1">
+                            <select class="categoriaSelect bg-gray-50 border border-gray-300 rounded-lg p-1">
+                                ${categoriasGasto.map(cat => `<option value="${cat}" ${gasto.categoria===cat?'selected':''}>${cat}</option>`).join('')}
+                            </select>
+                        </td>
+                        <td class="border px-2 py-1"><input type="text" class="descripcionInput bg-gray-50 border border-gray-300 rounded-lg p-1 w-full" value="${gasto.descripcion||''}" placeholder="Opcional"></td>
+                        <td class="border px-2 py-1"><input type="number" class="valorInput bg-gray-50 border border-gray-300 rounded-lg p-1 w-full" value="${gasto.valor||''}" min="0"></td>
+                        <td class="border px-2 py-1 text-center"><button type="button" class="text-red-600 hover:underline removeGastoBtn" data-idx="${idx}">Eliminar</button></td>
+                    `;
+                    // Eventos
+                    row.querySelector('.categoriaSelect').addEventListener('change', e => { gastos[idx].categoria = e.target.value; });
+                    row.querySelector('.descripcionInput').addEventListener('input', e => { gastos[idx].descripcion = e.target.value; });
+                    row.querySelector('.valorInput').addEventListener('input', e => { gastos[idx].valor = parseFloat(e.target.value)||0; gastosTotalSpan.textContent = gastos.reduce((acc, g) => acc + (Number(g.valor)||0), 0).toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 }); });
+                    row.querySelector('.removeGastoBtn').addEventListener('click', function() { gastos.splice(idx,1); renderGastosTable(); });
+                    gastosTableBody.appendChild(row);
+                });
+                gastosTotalSpan.textContent = total.toLocaleString('es-CO', { style: 'currency', currency: 'COP', minimumFractionDigits: 0 });
+            }
+            document.getElementById('addGastoBtn').onclick = function() {
+                gastos.push({ categoria: 'Arrendamientos', descripcion: '', valor: 0 });
+                renderGastosTable();
+            };
+            renderGastosTable();
+
+            // --- Productos dinámicos ---
+            let products = [];
+            const addProductBtn = document.getElementById('addProductBtn');
+            const productsTableBody = document.getElementById('productsTableBody');
+            function formatCurrency(value) {
+                return new Intl.NumberFormat('es-CO', {
+                    style: 'currency',
+                    currency: 'COP',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(value);
+            }
+            function renderProductsTable() {
+                if (!productsTableBody) return;
+                productsTableBody.innerHTML = '';
+                products.forEach((prod, idx) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="py-2 px-4 border-b">${prod.name}</td>
+                        <td class="py-2 px-4 border-b">${formatCurrency(prod.price)}</td>
+                        <td class="py-2 px-4 border-b">${formatCurrency(prod.cost)}</td>
+                        <td class="py-2 px-4 border-b">${prod.sales}</td>
+                        <td class="py-2 px-4 border-b text-center">
+                            <button class="text-red-600 hover:underline" data-idx="${idx}" type="button">Eliminar</button>
+                        </td>
+                    `;
+                    row.querySelector('button').addEventListener('click', function() {
+                        products.splice(idx, 1);
+                        renderProductsTable();
+                    });
+                    productsTableBody.appendChild(row);
+                });
+            }
+            if (addProductBtn) {
+                addProductBtn.onclick = function() {
+                    const name = document.getElementById('productName').value.trim();
+                    const price = parseFloat(document.getElementById('salePrice').value);
+                    const cost = parseFloat(document.getElementById('productCost').value);
+                    const sales = parseFloat(document.getElementById('monthlySales').value);
+                    if (!name || isNaN(price) || isNaN(cost) || isNaN(sales)) {
+                        alert('Por favor completa todos los campos del producto.');
+                        return;
+                    }
+                    products.push({ name, price, cost, sales });
+                    renderProductsTable();
+                    document.getElementById('productName').value = '';
+                    document.getElementById('salePrice').value = '';
+                    document.getElementById('productCost').value = '';
+                    document.getElementById('monthlySales').value = '';
+                };
+            }
+            // Render tabla al cargar por si hay productos previos
+            renderProductsTable();
+            // Resumen Final
+            const summarySection = document.getElementById('summarySection');
+            const summaryContent = document.getElementById('summaryContent');
+            const consultingBtnSummary = document.getElementById('consultingBtnSummary');
+            const backToDiagnosisBtn = document.getElementById('backToDiagnosisBtn');
+            // Elements
+            const landing = document.getElementById('landing');
+            const calculator = document.getElementById('calculator');
+            const startButton = document.getElementById('startButton');
+            const startButtonBottom = document.getElementById('startButtonBottom');
+            const tabs = document.querySelectorAll('.tab-content');
+            const progressBar = document.getElementById('progressBar');
+            const steps = document.querySelectorAll('.step');
+            
+            // Navigation buttons
+            const nextBtn1 = document.getElementById('nextBtn1');
+            const prevBtn2 = document.getElementById('prevBtn2');
+            const nextBtn2 = document.getElementById('nextBtn2');
+            const prevBtn3 = document.getElementById('prevBtn3');
+            const nextBtn3 = document.getElementById('nextBtn3');
+            const prevBtn4 = document.getElementById('prevBtn4');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const prevBtn5 = document.getElementById('prevBtn5');
+            const resetBtn = document.getElementById('resetBtn');
+            const consultingBtn = document.getElementById('consultingBtn');
+            
+            // Current tab
+            let currentTab = 1;
+
+            // Consolidado visual de la información ingresada
+            function renderUserSummary() {
+                let resumenHtml = '<table class="min-w-full text-sm"><tbody>';
+                if (products && products.length > 0) {
+                    resumenHtml += '<tr><td class="font-semibold text-blue-900 pr-2">Productos:</td><td>';
+                    resumenHtml += '<ul class="list-disc ml-4">';
+                    products.forEach(prod => {
+                        resumenHtml += `<li><b>${prod.name}</b> - Precio: ${formatCurrency(prod.price)}, Costo: ${formatCurrency(prod.cost)}, Ventas/mes: ${prod.sales}</li>`;
+                    });
+                    resumenHtml += '</ul></td></tr>';
+                } else {
+                    const name = document.getElementById('productName')?.value || '-';
+                    const price = document.getElementById('salePrice')?.value || '-';
+                    const cost = document.getElementById('productCost')?.value || '-';
+                    const sales = document.getElementById('monthlySales')?.value || '-';
+                    resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Producto:</td><td>${name}</td></tr>`;
+                    resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Precio de venta:</td><td>${formatCurrency(price)}</td></tr>`;
+                    resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Costo unitario:</td><td>${formatCurrency(cost)}</td></tr>`;
+                    resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Ventas/mes:</td><td>${sales}</td></tr>`;
+                }
+                // Otros datos
+                const adBudget = document.getElementById('adBudget')?.value || '-';
+                // Calcular el total de gastos discriminados
+                let fixedCosts = 0;
+                if (typeof gastos !== 'undefined' && Array.isArray(gastos)) {
+                    fixedCosts = gastos.reduce((acc, g) => acc + (Number(g.valor)||0), 0);
+                } else {
+                    fixedCosts = document.getElementById('fixedCosts')?.value || 0;
+                }
+                const shopifyFee = document.getElementById('shopifyFee')?.value || '-';
+                const paymentGatewayFee = document.getElementById('paymentGatewayFee')?.value || '-';
+                const thirdPartyFee = document.getElementById('thirdPartyFee')?.value || '-';
+                const shippingCost = document.getElementById('shippingCost')?.value || '-';
+                const expectedROAS = document.getElementById('expectedROAS')?.value || '-';
+                const minMargin = document.getElementById('minMargin')?.value || '-';
+                const maxDiscount = document.getElementById('maxDiscount')?.value || '-';
+                const expectedProfit = document.getElementById('expectedProfit')?.value || '-';
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Presupuesto de pauta:</td><td>${formatCurrency(adBudget)}</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Gastos fijos mensuales:</td><td>${formatCurrency(fixedCosts)}</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Comisión Shopify (%):</td><td>${shopifyFee}%</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Comisión pasarela principal (%):</td><td>${paymentGatewayFee}%</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Comisión pasarela terceros (%):</td><td>${thirdPartyFee}%</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Costo de envío:</td><td>${formatCurrency(shippingCost)}</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">ROAS esperado:</td><td>${expectedROAS}</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Margen mínimo deseado (%):</td><td>${minMargin}%</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Descuento máximo permitido (%):</td><td>${maxDiscount}%</td></tr>`;
+                resumenHtml += `<tr><td class="font-semibold text-blue-900 pr-2">Utilidad esperada:</td><td>${formatCurrency(expectedProfit)}</td></tr>`;
+                resumenHtml += '</tbody></table>';
+                const tableDiv = document.getElementById('userSummaryTable');
+                if (tableDiv) tableDiv.innerHTML = resumenHtml;
+            }
+            
+            // Start calculator
+            function startCalculator() {
+                landing.classList.add('hidden');
+                calculator.classList.remove('hidden');
+                showTab(1);
+            }
+            
+            startButton.addEventListener('click', startCalculator);
+            startButtonBottom.addEventListener('click', startCalculator);
+            
+            // Show tab
+            function showTab(tabNumber) {
+                tabs.forEach(tab => tab.classList.remove('active'));
+                document.getElementById(`tab${tabNumber}`).classList.add('active');
+                // Update progress bar
+                const progress = ((tabNumber - 1) / 4) * 100;
+                progressBar.style.width = `${progress}%`;
+                // Update steps
+                steps.forEach((step, index) => {
+                    if (index + 1 < tabNumber) {
+                        step.classList.add('completed');
+                        step.classList.remove('active');
+                    } else if (index + 1 === tabNumber) {
+                        step.classList.add('active');
+                        step.classList.remove('completed');
+                    } else {
+                        step.classList.remove('active', 'completed');
+                    }
+                });
+                currentTab = tabNumber;
+                // Si es el tab del simulador, inicializa sliders y resultados
+                if (tabNumber === 5) {
+                    setTimeout(() => {
+                        document.getElementById('userSummaryBlock').style.display = '';
+                        renderUserSummary();
+                        initSimulationSliders();
+                        updateSimulation();
+                    }, 100);
+                } else {
+                    const block = document.getElementById('userSummaryBlock');
+                    if (block) block.style.display = 'none';
+                }
+            }
+            
+            // Navigation event listeners
+            nextBtn1.addEventListener('click', () => {
+                if (validateTab(1)) showTab(2);
+            });
+            
+            prevBtn2.addEventListener('click', () => showTab(1));
+            
+            nextBtn2.addEventListener('click', () => {
+                if (validateTab(2)) showTab(3);
+            });
+            
+            prevBtn3.addEventListener('click', () => showTab(2));
+            
+            nextBtn3.addEventListener('click', () => {
+                if (validateTab(3)) showTab(4);
+            });
+            
+            prevBtn4.addEventListener('click', () => showTab(3));
+            
+            calculateBtn.addEventListener('click', () => {
+                if (validateTab(4)) {
+                    calculateResults();
+                    showTab(5);
+                }
+            });
+            
+            prevBtn5.addEventListener('click', () => showTab(4));
+            
+            resetBtn.addEventListener('click', () => {
+                resetForm();
+                showTab(1);
+            });
+            
+            consultingBtn.addEventListener('click', () => {
+                alert('¡Gracias por tu interés! Te contactaremos pronto para agendar tu consultoría personalizada.');
+            });
+            
+            // Validate tab inputs
+            function validateTab(tabNumber) {
+                let isValid = true;
+                const tab = document.getElementById(`tab${tabNumber}`);
+                const requiredInputs = tab.querySelectorAll('input[required]');
+                
+                requiredInputs.forEach(input => {
+                    if (!input.value) {
+                        input.classList.add('border-red-500');
+                        isValid = false;
+                    } else {
+                        input.classList.remove('border-red-500');
+                    }
+                });
+                
+                if (!isValid) {
+                    alert('Por favor completa todos los campos requeridos.');
+                }
+                
+                return isValid;
+            }
+            
+            // Reset form
+            function resetForm() {
+                const inputs = document.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.classList.remove('border-red-500');
+                });
+            }
+            
+            // Initialize simulation sliders
+            function initSimulationSliders() {
+                // Si hay productos, usar el promedio consolidado
+                let salePrice, adBudget, paymentGatewayFee, productCost, monthlySales, cacValue;
+                if (products && products.length > 0) {
+                    let totalRevenue = 0, totalCost = 0, totalSales = 0;
+                    products.forEach(prod => {
+                        totalRevenue += prod.price * prod.sales;
+                        totalCost += prod.cost * prod.sales;
+                        totalSales += prod.sales;
+                    });
+                    salePrice = totalSales > 0 ? totalRevenue / totalSales : 0;
+                    productCost = totalSales > 0 ? totalCost / totalSales : 0;
+                    monthlySales = totalSales;
+                } else {
+                    salePrice = parseFloat(document.getElementById('salePrice').value) || 0;
+                    productCost = parseFloat(document.getElementById('productCost').value) || 0;
+                    monthlySales = parseFloat(document.getElementById('monthlySales').value) || 0;
+                }
+                adBudget = parseFloat(document.getElementById('adBudget').value) || 0;
+                paymentGatewayFee = parseFloat(document.getElementById('paymentGatewayFee').value) || 0;
+                // CAC slider
+                const cacSlider = document.getElementById('cacSlider');
+                cacSlider.min = 0;
+                cacSlider.max = Math.max(500000, salePrice * 2, 10000);
+                cacSlider.step = 1000;
+                cacSlider.value = salePrice > 0 ? Math.floor(salePrice * 0.2) : 1000;
+                cacSlider.disabled = false;
+                // Price slider
+                const priceSlider = document.getElementById('priceSlider');
+                priceSlider.min = Math.max(1000, Math.floor(salePrice * 0.5));
+                priceSlider.max = Math.max(Math.ceil(salePrice * 2), 2000);
+                priceSlider.step = 1000;
+                priceSlider.value = salePrice > 0 ? salePrice : 1000;
+                priceSlider.disabled = false;
+                // Budget slider
+                const budgetSlider = document.getElementById('budgetSlider');
+                budgetSlider.min = 0;
+                budgetSlider.max = Math.max(100000, adBudget * 10, 10000);
+                budgetSlider.step = 10000;
+                budgetSlider.value = adBudget > 0 ? adBudget : 10000;
+                budgetSlider.disabled = false;
+                // Discount slider
+                const discountSlider = document.getElementById('discountSlider');
+                discountSlider.min = 0;
+                discountSlider.max = 50;
+                discountSlider.step = 1;
+                discountSlider.value = 0;
+                discountSlider.disabled = false;
+                // Gateway fee slider
+                const gatewayFeeSlider = document.getElementById('gatewayFeeSlider');
+                gatewayFeeSlider.min = 0;
+                gatewayFeeSlider.max = 10;
+                gatewayFeeSlider.step = 0.1;
+                gatewayFeeSlider.value = paymentGatewayFee > 0 ? paymentGatewayFee : 0;
+                gatewayFeeSlider.disabled = false;
+                // Refresca los valores visuales de los sliders y asegura actualización en tiempo real
+                function refreshSimValues() {
+                    document.getElementById('priceSim').textContent = formatCurrency(priceSlider.value);
+                    document.getElementById('budgetSim').textContent = formatCurrency(budgetSlider.value);
+                    document.getElementById('discountSim').textContent = discountSlider.value + '%';
+                    document.getElementById('gatewayFeeSim').textContent = gatewayFeeSlider.value + '%';
+                    document.getElementById('cacSim').textContent = formatCurrency(cacSlider.value);
+                }
+                // Asignar listeners únicos
+                priceSlider.oninput = function() { refreshSimValues(); updateSimulation(); };
+                budgetSlider.oninput = function() { refreshSimValues(); updateSimulation(); };
+                discountSlider.oninput = function() { refreshSimValues(); updateSimulation(); };
+                gatewayFeeSlider.oninput = function() { refreshSimValues(); updateSimulation(); };
+                cacSlider.oninput = function() { refreshSimValues(); updateSimulation(); };
+                // Refrescar valores iniciales
+                refreshSimValues();
+                // Calcula el CAC óptimo para mostrarlo como referencia
+                let optimalCAC = 0;
+                const expectedProfit = parseFloat(document.getElementById('expectedProfit') ? document.getElementById('expectedProfit').value : 0) || 0;
+                // Calcular avgUnitContribution para el simulador
+                let avgUnitContribution = 0;
+                if (products && products.length > 0) {
+                    let totalUnitContribution = 0, totalSales = 0;
+                    products.forEach(prod => {
+                        totalUnitContribution += (prod.price - prod.cost) * prod.sales;
+                        totalSales += prod.sales;
+                    });
+                    avgUnitContribution = totalSales > 0 ? totalUnitContribution / totalSales : 0;
+                }
+                if (products && products.length > 0 && avgUnitContribution > 0) {
+                    const fixedCosts = parseFloat(document.getElementById('fixedCosts') ? document.getElementById('fixedCosts').value : 0) || 0;
+                    const ventasNecesarias = Math.ceil((fixedCosts + expectedProfit) / avgUnitContribution);
+                    optimalCAC = avgUnitContribution - ((expectedProfit + fixedCosts) / ventasNecesarias);
+                }
+                // Agrega referencia visual del CAC óptimo
+                let cacRef = document.getElementById('cacOptimoReferencia');
+                if (!cacRef) {
+                    cacRef = document.createElement('div');
+                    cacRef.id = 'cacOptimoReferencia';
+                    cacRef.className = 'text-sm text-blue-700 mt-2';
+                    document.getElementById('gatewayFeeSlider').parentElement.appendChild(cacRef);
+                }
+                cacRef.innerHTML = `<b>CAC óptimo de referencia:</b> ${isFinite(optimalCAC) ? formatCurrency(optimalCAC) : '-'} (para alcanzar la utilidad esperada)`;
+                // (No sobrescribir los listeners correctos, ya están asignados arriba)
+            }
+
+            function updateSimulation() {
+                // Lee los valores de los sliders SIEMPRE
+                const simPrice = document.getElementById('priceSlider') ? parseFloat(document.getElementById('priceSlider').value) : 0;
+                const simBudget = document.getElementById('budgetSlider') ? parseFloat(document.getElementById('budgetSlider').value) : 0;
+                const simDiscount = document.getElementById('discountSlider') ? parseFloat(document.getElementById('discountSlider').value) : 0;
+                const simGatewayFee = document.getElementById('gatewayFeeSlider') ? parseFloat(document.getElementById('gatewayFeeSlider').value) : 0;
+                const cacValue = document.getElementById('cacSlider') ? parseFloat(document.getElementById('cacSlider').value) : 0;
+                // Usa el costo promedio y ventas promedio
+                let productCost = 0, monthlySales = 0;
+                if (products && products.length > 0) {
+                    let totalCost = 0, totalSales = 0;
+                    products.forEach(prod => {
+                        totalCost += prod.cost * prod.sales;
+                        totalSales += prod.sales;
+                    });
+                    productCost = totalSales > 0 ? totalCost / totalSales : 0;
+                    monthlySales = totalSales;
+                } else {
+                    productCost = document.getElementById('productCost') ? parseFloat(document.getElementById('productCost').value) : 0;
+                    monthlySales = document.getElementById('monthlySales') ? parseFloat(document.getElementById('monthlySales').value) : 0;
+                }
+                const fixedCosts = document.getElementById('fixedCosts') ? parseFloat(document.getElementById('fixedCosts').value) : 0;
+                const shopifyFee = document.getElementById('shopifyFee') ? parseFloat(document.getElementById('shopifyFee').value) : 0;
+                const thirdPartyFee = document.getElementById('thirdPartyFee') ? parseFloat(document.getElementById('thirdPartyFee').value) : 0;
+                let shippingCost = 0;
+                if (document.getElementById('shippingCost')) {
+                    const val = document.getElementById('shippingCost').value;
+                    shippingCost = val === '' || isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+                }
+                const expectedROAS = document.getElementById('expectedROAS') ? parseFloat(document.getElementById('expectedROAS').value) : 0;
+                // Update display values
+                document.getElementById('priceSim').textContent = formatCurrency(simPrice);
+                document.getElementById('budgetSim').textContent = formatCurrency(simBudget);
+                document.getElementById('discountSim').textContent = simDiscount + '%';
+                document.getElementById('gatewayFeeSim').textContent = simGatewayFee + '%';
+                document.getElementById('cacSim').textContent = formatCurrency(cacValue);
+                // Calcular precio con descuento
+                const discountedPrice = simPrice * (1 - simDiscount / 100);
+                // Calcular comisiones
+                const gatewayFeeAmount = discountedPrice * (simGatewayFee / 100);
+                const shopifyFeeAmount = discountedPrice * (shopifyFee / 100);
+                const thirdPartyFeeAmount = discountedPrice * (thirdPartyFee / 100);
+                const totalFees = gatewayFeeAmount + shopifyFeeAmount + thirdPartyFeeAmount;
+                // Margen de contribución
+                const unitContribution = discountedPrice - productCost - totalFees - shippingCost;
+                const contributionMargin = discountedPrice > 0 ? (unitContribution / discountedPrice) * 100 : 0;
+                // ROAS necesario
+                const totalRevenue = discountedPrice * monthlySales;
+                const requiredROAS = simBudget > 0 ? (totalRevenue / simBudget) * 100 : 0;
+                // CAC máximo
+                const maxCAC = unitContribution;
+                // Descuento máximo permitido (para no bajar del margen mínimo deseado)
+                let minMargin = parseFloat(document.getElementById('minMargin')?.value || '0') || 0;
+                let maxAllowedDiscount = 0;
+                if (simPrice > 0 && minMargin > 0) {
+                    // Fórmula: descuento = 1 - ((costos + comisiones + envío) / (precio * (1 - margen mínimo)))
+                    const totalCostos = productCost + totalFees + shippingCost;
+                    const margenDecimal = minMargin / 100;
+                    const precioSinMargen = simPrice * (1 - margenDecimal);
+                    if (simPrice > 0 && precioSinMargen > 0) {
+                        maxAllowedDiscount = 100 * (1 - (totalCostos / (simPrice * (1 - margenDecimal))));
+                        if (maxAllowedDiscount < 0) maxAllowedDiscount = 0;
+                        if (maxAllowedDiscount > 50) maxAllowedDiscount = 50;
+                    }
+                }
+                // Rentabilidad estimada usando el CAC simulado y el presupuesto de pauta
+                let estimatedSales = monthlySales;
+                if (simBudget > 0 && cacValue > 0) {
+                    // El presupuesto limita la cantidad de ventas posibles
+                    const maxSalesByBudget = Math.floor(simBudget / cacValue);
+                    estimatedSales = Math.min(monthlySales, maxSalesByBudget);
+                }
+                const estimatedProfit = (unitContribution * estimatedSales) - fixedCosts;
+                const estimatedIncome = estimatedSales * discountedPrice;
+                // Mostrar ventas estimadas y CAC
+                let ventasHtml = `<div class='mt-4 text-blue-900'><b>Ventas estimadas:</b> ${isFinite(estimatedSales) ? estimatedSales.toFixed(0) : '-'} unidades<br><b>Ingresos estimados:</b> ${isFinite(estimatedIncome) ? formatCurrency(estimatedIncome) : '-'}<br><b>CAC utilizado:</b> ${isFinite(cacValue) ? formatCurrency(cacValue) : '-'}<br><b>Pauta disponible:</b> ${formatCurrency(simBudget)}</div>`;
+                let ventasDiv = document.getElementById('simVentasResult');
+                if (!ventasDiv) {
+                    ventasDiv = document.createElement('div');
+                    ventasDiv.id = 'simVentasResult';
+                    document.querySelector('.mt-8.p-6.bg-white').appendChild(ventasDiv);
+                }
+                ventasDiv.innerHTML = ventasHtml;
+                // Actualizar resultados
+                document.getElementById('simMarginResult').textContent = isFinite(contributionMargin) ? contributionMargin.toFixed(2) + '%' : '-';
+                document.getElementById('simROASResult').textContent = isFinite(requiredROAS) ? requiredROAS.toFixed(2) + '%' : '-';
+                document.getElementById('simCACResult').textContent = isFinite(maxCAC) ? formatCurrency(maxCAC) : '-';
+                document.getElementById('simProfitResult').textContent = isFinite(estimatedProfit) ? formatCurrency(estimatedProfit) : '-';
+                // Mostrar descuento máximo permitido en la sección de Análisis de Marketing si existe el campo
+                const maxAllowedDiscountResult = document.getElementById('maxAllowedDiscountResult');
+                if (maxAllowedDiscountResult) {
+                    maxAllowedDiscountResult.textContent = isFinite(maxAllowedDiscount) ? maxAllowedDiscount.toFixed(2) + '%' : '-';
+                }
+                // Indicador de estado
+                const simStatusIcon = document.getElementById('simStatusIcon');
+                const simStatusText = document.getElementById('simStatusText');
+                if (isFinite(estimatedProfit) && estimatedProfit > 0) {
+                    simStatusIcon.style.backgroundColor = '#10B981';
+                    simStatusText.textContent = 'Rentable';
+                    simStatusText.className = 'font-medium text-green-600';
+                } else {
+                    simStatusIcon.style.backgroundColor = '#EF4444';
+                    simStatusText.textContent = 'No rentable';
+                    simStatusText.className = 'font-medium text-red-600';
+                }
+            }
+            // Calculate and display results
+            function calculateResults() {
+                // Si hay productos en la tabla, calcular el consolidado y mostrar por producto
+                if (products && products.length > 0) {
+                    let totalRevenue = 0, totalCost = 0, totalUnitContribution = 0, totalSales = 0;
+                    let resumenHtml = '';
+                    let totalFees = 0, totalShipping = 0;
+                    // Puedes ajustar estos valores si tienes comisiones, shipping, etc. por producto
+                    const paymentGatewayFee = parseFloat(document.getElementById('paymentGatewayFee') ? document.getElementById('paymentGatewayFee').value : 0) || 0;
+                    const shopifyFee = parseFloat(document.getElementById('shopifyFee') ? document.getElementById('shopifyFee').value : 0) || 0;
+                    const thirdPartyFee = parseFloat(document.getElementById('thirdPartyFee') ? document.getElementById('thirdPartyFee').value : 0) || 0;
+                    let shippingCost = 0;
+                    if (document.getElementById('shippingCost')) {
+                        const val = document.getElementById('shippingCost').value;
+                        shippingCost = val === '' || isNaN(parseFloat(val)) ? 0 : parseFloat(val);
+                    }
+                    const adBudget = parseFloat(document.getElementById('adBudget') ? document.getElementById('adBudget').value : 0) || 0;
+                    // Calcular IVA de la pauta (19%)
+                    const adBudgetIVA = adBudget * 0.19;
+                    const expectedROAS = parseFloat(document.getElementById('expectedROAS') ? document.getElementById('expectedROAS').value : 0) || 0;
+                    const minMargin = parseFloat(document.getElementById('minMargin') ? document.getElementById('minMargin').value : 0) || 0;
+                    const maxDiscount = parseFloat(document.getElementById('maxDiscount') ? document.getElementById('maxDiscount').value : 0) || 0;
+                    products.forEach(prod => {
+                        const fees = prod.price * (paymentGatewayFee + shopifyFee + thirdPartyFee) / 100;
+                        const unitContribution = prod.price - prod.cost - fees - shippingCost;
+                        const contributionMargin = (unitContribution / prod.price) * 100;
+                        const revenue = prod.price * prod.sales;
+                        const cost = prod.cost * prod.sales;
+                        totalRevenue += revenue;
+                        totalCost += cost;
+                        totalUnitContribution += unitContribution * prod.sales;
+                        totalSales += prod.sales;
+                        totalFees += fees * prod.sales;
+                        totalShipping += shippingCost * prod.sales;
+                        resumenHtml += `<tr>
+                            <td class='border px-2 py-1'>${prod.name}</td>
+                            <td class='border px-2 py-1'>${formatCurrency(prod.price)}</td>
+                            <td class='border px-2 py-1'>${formatCurrency(prod.cost)}</td>
+                            <td class='border px-2 py-1'>${formatCurrency(fees)}</td>
+                            <td class='border px-2 py-1'>${formatCurrency(unitContribution)}</td>
+                            <td class='border px-2 py-1'>${contributionMargin.toFixed(2)}%</td>
+                        </tr>`;
+                    });
+                    // Consolidado
+                    const fixedCosts = gastos.reduce((acc, g) => acc + (Number(g.valor)||0), 0);
+                    // Sumar el IVA de la pauta a los gastos fijos para el cálculo de utilidad neta
+                    const utilidadNeta = totalUnitContribution - fixedCosts - adBudgetIVA;
+                    // Indicadores consolidados
+                    const avgSalePrice = totalSales > 0 ? totalRevenue / totalSales : 0;
+                    const avgUnitContribution = totalSales > 0 ? totalUnitContribution / totalSales : 0;
+                    const avgContributionMargin = (avgSalePrice > 0 && avgUnitContribution > 0) ? (avgUnitContribution / avgSalePrice) * 100 : 0;
+                    const breakEvenUnits = avgUnitContribution > 0 ? Math.ceil(fixedCosts / avgUnitContribution) : 0;
+                    const breakEvenValue = avgUnitContribution > 0 ? breakEvenUnits * avgSalePrice : 0;
+                    const requiredROAS = adBudget > 0 ? (totalRevenue / adBudget) * 100 : 0;
+                    const optimalBudget = expectedROAS > 0 ? (totalRevenue * 100) / expectedROAS : 0;
+                    const maxCAC = avgUnitContribution;
+                    const minContributionMargin = minMargin / 100;
+                    // Cálculo corregido de descuento máximo recomendado
+                    let maxAllowedDiscount = 0;
+                    let margenContribucion = avgSalePrice - (avgSalePrice - avgUnitContribution); // margenContribucion = avgUnitContribution
+                    if (
+                        avgSalePrice > 0 &&
+                        avgUnitContribution > 0 &&
+                        !isNaN(avgSalePrice) &&
+                        !isNaN(avgUnitContribution)
+                    ) {
+                        maxAllowedDiscount = (avgUnitContribution / avgSalePrice) * 100;
+                    } else {
+                        maxAllowedDiscount = 0;
+                    }
+                    // Actualiza todos los indicadores
+                    document.getElementById('contributionMarginResult').textContent = avgContributionMargin.toFixed(2) + '%';
+                    document.getElementById('unitContributionResult').textContent = formatCurrency(avgUnitContribution);
+                    document.getElementById('breakEvenUnitsResult').textContent = breakEvenUnits > 0 ? breakEvenUnits + ' unidades' : '-';
+                    document.getElementById('breakEvenValueResult').textContent = breakEvenValue > 0 ? formatCurrency(breakEvenValue) : '-';
+                    document.getElementById('requiredROASResult').textContent = requiredROAS > 0 ? requiredROAS.toFixed(2) + '%' : '-';
+                    document.getElementById('optimalBudgetResult').textContent = optimalBudget > 0 ? formatCurrency(optimalBudget) : '-';
+                    document.getElementById('maxCACResult').textContent = formatCurrency(maxCAC);
+                    document.getElementById('maxAllowedDiscountResult').textContent = maxAllowedDiscount > 0 ? maxAllowedDiscount.toFixed(2) + '%' : '-';
+                    // Desglose del precio de venta
+                    createPriceBreakdown(avgSalePrice, avgSalePrice - avgUnitContribution, totalFees / totalSales, totalShipping / totalSales, avgUnitContribution);
+                    // Simulador de escenarios (puedes ajustar para usar el promedio o el primer producto)
+                    updateSimulation();
+                    // Mostrar tabla resumen por producto
+                    let resumenTable = `<table class='w-full text-sm mt-4 overflow-x-auto'><thead><tr class='bg-blue-100'>
+                        <th class='border px-2 py-1'>Producto</th>
+                        <th class='border px-2 py-1'>Precio</th>
+                        <th class='border px-2 py-1'>Costo</th>
+                        <th class='border px-2 py-1'>Comisión por unidad</th>
+                        <th class='border px-2 py-1'>Margen Unitario</th>
+                        <th class='border px-2 py-1'>Margen %</th>
+                    </tr></thead><tbody>${resumenHtml}</tbody></table>`;
+                    let resumenDiv = document.getElementById('resumenProductosTable');
+                    if (!resumenDiv) {
+                        resumenDiv = document.createElement('div');
+                        resumenDiv.id = 'resumenProductosTable';
+                        document.querySelector('#tab5 .mb-8.p-6.bg-blue-50').appendChild(resumenDiv);
+                    }
+                    resumenDiv.innerHTML = resumenTable;
+                    
+                    // Generar diagnóstico
+                    generateDiagnosis(avgContributionMargin, breakEvenUnits, totalSales, requiredROAS, expectedROAS, maxAllowedDiscount, maxDiscount, avgUnitContribution, avgSalePrice, fixedCosts);
+                    
+                    return;
+                }
+                // ...código original para un solo producto...
+            }
+            // Mueve la función createPriceBreakdown antes de calculateResults para asegurar su disponibilidad
+            function createPriceBreakdown(salePrice, productCost, totalFees, shippingCost, unitContribution) {
+                const ctx = document.createElement('canvas');
+                const chartDiv = document.getElementById('priceBreakdownChart');
+                if (chartDiv) {
+                    chartDiv.innerHTML = '';
+                    chartDiv.appendChild(ctx);
+                }
+                const data = {
+                    labels: ['Costo del producto', 'Comisiones', 'Envío', 'Ganancia'],
+                    datasets: [{
+                        data: [productCost, totalFees, shippingCost, unitContribution],
+                        backgroundColor: ['#3B82F6', '#93C5FD', '#BFDBFE', '#10B981'],
+                        hoverOffset: 4
+                    }]
+                };
+                if (window.Chart) {
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: data,
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { position: 'bottom' }
+                            }
+                        }
+                    });
+                }
+                // Texto desglose
+                const productCostPercent = (productCost / salePrice) * 100;
+                const feesPercent = (totalFees / salePrice) * 100;
+                const shippingPercent = (shippingCost / salePrice) * 100;
+                const profitPercent = (unitContribution / salePrice) * 100;
+                const breakdownText = `
+                    <p class="mb-2">De cada <strong>${formatCurrency(salePrice)}</strong> que vendes:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>${formatCurrency(productCost)}</strong> (${productCostPercent.toFixed(2)}%) va al costo del producto</li>
+                        <li><strong>${formatCurrency(totalFees)}</strong> (${feesPercent.toFixed(2)}%) se destina a comisiones</li>
+                        <li><strong>${formatCurrency(shippingCost)}</strong> (${shippingPercent.toFixed(2)}%) cubre el envío</li>
+                        <li><strong>${formatCurrency(unitContribution)}</strong> (${profitPercent.toFixed(2)}%) es tu ganancia bruta por unidad</li>
+                    </ul>
+                `;
+                const breakdownDiv = document.getElementById('priceBreakdownText');
+                if (breakdownDiv) breakdownDiv.innerHTML = breakdownText;
+            }
+            
+            function generateDiagnosis(contributionMargin, breakEvenUnits, monthlySales, requiredROAS, expectedROAS, maxAllowedDiscount, maxDiscount, avgUnitContribution, avgSalePrice, fixedCosts) {
+                let diagnosisText = '';
+                if (contributionMargin < 20) {
+                    diagnosisText += '<b>¡Atención!</b> Tu margen de contribución es bajo. Considera aumentar tu precio o reducir costos.';
+                } else if (contributionMargin < 40) {
+                    diagnosisText += 'Tu margen de contribución es aceptable, pero hay oportunidad de mejora.';
+                } else {
+                    diagnosisText += '¡Excelente! Tu margen de contribución es saludable.';
+                }
+                diagnosisText += `<br>Punto de equilibrio: <b>${breakEvenUnits > 0 ? Math.ceil(breakEvenUnits) : '-'} unidades</b>.`;
+                if (requiredROAS > expectedROAS) {
+                    diagnosisText += '<br>El ROAS necesario es mayor al esperado, revisa tu presupuesto de pauta.';
+                } else {
+                    diagnosisText += '<br>El ROAS necesario es alcanzable con tu presupuesto actual.';
+                }
+                diagnosisText += `<br>Descuento máximo recomendado: <b>${maxAllowedDiscount > 0 ? maxAllowedDiscount.toFixed(2) + '%' : '-'}</b>.`;
+                // NUEVO: cálculo de ventas y pauta para utilidad esperada
+                const expectedProfit = parseFloat(document.getElementById('expectedProfit') ? document.getElementById('expectedProfit').value : 0) || 0;
+                if (expectedProfit > 0 && avgUnitContribution > 0) {
+                    // El CAC óptimo se calcula considerando la utilidad esperada y lo que el cliente está dispuesto a invertir en pauta.
+                    // Si el usuario ingresó un presupuesto de pauta (adBudget), se usa ese valor para ajustar el CAC óptimo.
+                    const adBudget = parseFloat(document.getElementById('adBudget') ? document.getElementById('adBudget').value : 0) || 0;
+                    const adBudgetIVA = adBudget * 0.19;
+                    const ventasNecesarias = Math.ceil((fixedCosts + adBudgetIVA + expectedProfit) / avgUnitContribution);
+                    const valorVentas = ventasNecesarias * avgSalePrice;
+                    let optimalCAC;
+                    if (adBudget > 0) {
+                        // Si hay presupuesto de pauta, el CAC óptimo es adBudget / ventas necesarias
+                        optimalCAC = adBudget / ventasNecesarias;
+                    } else {
+                        // Si no hay presupuesto, se usa la fórmula financiera
+                        optimalCAC = avgUnitContribution - ((expectedProfit + fixedCosts + adBudgetIVA) / ventasNecesarias);
+                    }
+                    const pautaNecesaria = ventasNecesarias * optimalCAC;
+                    diagnosisText += `<br><b>Para lograr una utilidad de ${formatCurrency(expectedProfit)}, necesitas vender al menos ${ventasNecesarias} unidades (<span class='text-blue-900'>${formatCurrency(valorVentas)}</span> en ventas).</b>`;
+                    diagnosisText += `<br>El CAC óptimo para alcanzar ese objetivo es <b>${formatCurrency(optimalCAC)}</b> y deberías invertir aproximadamente <b>${formatCurrency(pautaNecesaria)}</b> en pauta para lograrlo.`;
+                    // Estado de resultados estimado
+                    const totalCostosVariables = ventasNecesarias * (avgSalePrice - avgUnitContribution);
+                    const estadoResultados = `
+                    <div class='mt-4 p-4 bg-white border rounded-lg'>
+                        <h4 class='font-semibold text-blue-900 mb-2'>Estado de Resultados Proyectado</h4>
+                        <table class='w-full text-sm'>
+                            <tr><td>Ingresos esperados</td><td class='text-right'>${formatCurrency(valorVentas)}</td></tr>
+                            <tr><td>Costos variables</td><td class='text-right'>${formatCurrency(totalCostosVariables)}</td></tr>
+                            <tr><td>Gastos fijos</td><td class='text-right'>${formatCurrency(fixedCosts)}</td></tr>
+                            <tr><td colspan="2">
+                                <div class='mt-2'>
+                                    <b>Detalle de gastos fijos:</b>
+                                    <table class='w-full text-xs mt-1 border'>
+                                        <thead><tr class='bg-blue-50'><th class='border px-1'>Categoría</th><th class='border px-1'>Descripción</th><th class='border px-1'>Valor mensual</th></tr></thead>
+                                        <tbody>
+                                            ${gastos.map(g=>`<tr><td class='border px-1'>${g.categoria}</td><td class='border px-1'>${g.descripcion||'-'}</td><td class='border px-1 text-right'>${formatCurrency(g.valor)}</td></tr>`).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </tr>
+                            <tr><td>IVA pauta (19%)</td><td class='text-right'>${formatCurrency(adBudgetIVA)}</td></tr>
+                            <tr><td>Inversión en pauta (CAC)</td><td class='text-right'>${formatCurrency(pautaNecesaria)}</td></tr>
+                            <tr class='font-bold border-t'><td>Utilidad neta esperada</td><td class='text-right'>${formatCurrency(expectedProfit)}</td></tr>
+                        </table>
+                    </div>`;
+                    diagnosisText += estadoResultados;
+                }
+                const diagnosisDiv = document.getElementById('generalDiagnosis');
+                if (diagnosisDiv) diagnosisDiv.innerHTML = diagnosisText;
+            }
+        });
+    </script>
+</body>
+</html>
